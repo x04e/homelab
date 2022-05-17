@@ -23,4 +23,5 @@ Install Windows 10 on a VM. Go through the standard Personal installation. Insta
 - If you have set up DHCP, DNS, and Routing on your domain controller, you should be able to log in as a domain user or admin and access the internet from LAN
 
 ## Linux Client
+TODO
 
