@@ -22,38 +22,36 @@ Install Windows 10 on a VM. Go through the standard Personal installation. Insta
 - You should see a popup welcoming you to the domain. Click "OK". Restart the VM
 - If you have set up DHCP, DNS, and Routing on your domain controller, you should be able to log in as a domain user or admin and access the internet from LAN
 
+
+
 ## Linux Client
-- Create a Linux 
-- 
-- Ensure nmcli connects to the network on startup
 
-    ```ini
+### Base VM setup
+- Create a Linux VM using a disk image, like the CentOS 7 Minimal (no GUI) image
+- When prompted, select "Install CentOS 7"
+- Go through the installer and select a language and disk to install to
+- Turn on the network adapter in the installer and change the hostname to something like "change-me", so we will rememeber to change it each time we need a new machine
+- Disable the annoying PC speaker beeps with the following:
 
+    ```sh
+    $ echo "blacklist pcspkr" > /etc/modprobe.d/bell.conf
+    $ reboot
     ```
 
-- Install realmd
-- Change hostname
-- This is the default configuration that will be created after running `realm join example.internal`:
+- Ensure that the network is connected by checking `nmcli`
+- Update packages with `yum makecache` and then `yum update`
+- Install required packages:
 
-    ```ini
-    [sssd]
-    domains = example.internal
-    config_file_version = 2
-    services = nss, pam
-
-    [domain/example.internal]
-    ad_domain = example.internal
-    krb5_realm = EXAMPLE.INTERNAL
-    realmd_tags = manages-system joined-with-samba 
-    cache_credentials = True
-    id_provider = ad
-    krb5_store_password_if_offline = True
-    default_shell = /bin/bash
-    ldap_id_mapping = True
-    use_fully_qualified_names = True
-    fallback_homedir = /home/%u@%d
-    access_provider = ad
+    ```sh
+    $ yum makecache
+    $ yum install open-vm-tools vim net-tools sssd realmd oddjob oddjob-mkhomedir adcli samba-common samba-common-tools krb5-workstation openldap-clients policycoreutils-python
     ```
 
-- Change `use_fully_qualified_names` to `False` to allow logins without a domain component each time, e.g. logging in with `john.doe` instead of `john.doe@example.internal`. This should also mean that every user's home folder will be their just their username, e.g. `/home/john.doe/`. If for whatever reason this is not the case and sssd uses the domain in the home folder name (`/home/john.doe@example.internal/`), you can add `override_homedir = /home/%u` to `sssd.conf` and restart the `sssd` service to override that behaviour
+- Change the GRUB wait time from 5 seconds to 1 second to speed up booting. Edit `/etc/default/grub` and change `GRUB_TIMEOUT=5` to `GRUB_TIMEOUT=1`. Finally, run `grub2-mkconfig -o /boot/grub2/grub.cfg` and reboot to see if the changes have persisted
+- Copy the `/tmp/setup` script to your VM (using scp, for example): `scp ./vm-setup.sh root@<vm-ip>:/tmp` and make it executable on the VM with `chmod +x /tmp/vm-setup.sh`
+- Finally, create a snapshot of your VM at this point. This snapshot will be the base VM from which you clone all other Linux hosts
+
+### Join to Domain
+- Clone your base VM from [Base VM Setup](#base-vm-setup)
+- Run `/tmp/vm-setup.sh` to configure your new hostname and join a domain (e.g. example.internal). This script will also set sssd to use short usernames over fully-qualified usernames and short home directories over something like `/home/user@example.internal/`
 
