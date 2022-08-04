@@ -11,5 +11,9 @@ sed -i \
     -e 's/fallback_homedir.*/fallback_homedir=\/home\/%u/g;' \
     /etc/sssd/sssd.conf
 
+# Required property for automatic DNS registration for domain controller
+# (Possibly only needed when using short hostname without domain component?)
+echo "ad_hostname = $hn.$rl" >> /etc/sssd/sssd.conf
+
 systemctl restart sssd
 
