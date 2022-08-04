@@ -1,15 +1,15 @@
 # Install Windows Server 2019
 
 Create a new VM in VMWare Workstation
-    - Select Typical installation
-    - Select "I will install the operating system later"
-    - Select "Microsoft Windows" as the guest operating system and "Windows Server 2019" as the version
-    - Provide a name and VM location
-    - Select a disk size of approx. 60GB. 32GB is considered the bare minimum for storage
-    - Click "Customise Hardware" and give the VM 2 CPUs and 4GB of memory
-    - Click "Finish" and "Close"
-    - Edit the VM settings and attach the Windows Server 2019 ISO as a removable disk
-    - Start the VM
+- Select Typical installation
+- Select "I will install the operating system later"
+- Select "Microsoft Windows" as the guest operating system and "Windows Server 2019" as the version
+- Provide a name and VM location
+- Select a disk size of approx. 60GB. 32GB is considered the bare minimum for storage
+- Click "Customise Hardware" and give the VM 2 CPUs and 4GB of memory
+- Click "Finish" and "Close"
+- Edit the VM settings and attach the Windows Server 2019 ISO as a removable disk
+- Start the VM
 
 ## Installer
 - Press any key when prompted at startup

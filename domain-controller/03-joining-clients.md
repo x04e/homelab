@@ -48,7 +48,7 @@ Install Windows 10 on a VM. Go through the standard Personal installation. Insta
     ```
 
 - Change the GRUB wait time from 5 seconds to 1 second to speed up booting. Edit `/etc/default/grub` and change `GRUB_TIMEOUT=5` to `GRUB_TIMEOUT=1`. Finally, run `grub2-mkconfig -o /boot/grub2/grub.cfg` and reboot to see if the changes have persisted
-- Copy the [`/tmp/setup`](vm-setup.sh) script to your VM (using scp, for example): `scp ./vm-setup.sh root@<vm-ip>:/tmp` and make it executable on the VM with `chmod +x /tmp/vm-setup.sh`
+- Copy the [`/tmp/setup`](./vm-setup.sh) script to your VM (using scp, for example): `scp ./vm-setup.sh root@<vm-ip>:/tmp` and make it executable on the VM with `chmod +x /tmp/vm-setup.sh`
 - Finally, create a snapshot of your VM at this point. This snapshot will be the base VM from which you clone all other Linux hosts
 
 ### Join to Domain
